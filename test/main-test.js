@@ -77,10 +77,65 @@ describe('unit test', () => {
       ];
 
 
-      console.log(countedItems);
 
       expect(buildItems(inputs)).toEqual(countedItems);
     });
   });
 
+});
+
+
+describe('unit test', () => {
+  describe('buildItems', () => {
+    const countedItems = [
+      {
+        item:new Item('ITEM000001', '雪碧', '瓶', 3.00),
+        count: 5
+      },
+      {
+        item:new Item('ITEM000003', '荔枝', '斤', 15.00),
+        count: 2
+      },
+      {
+        item:new Item('ITEM000005', '方便面', '袋', 4.50),
+        count: 3
+      }
+    ];
+
+    it('should return correct items', () => {
+      const itemsSubtotal = [
+        {
+          cartItem:{
+            item:new Item('ITEM000001', '雪碧', '瓶', 3.00),
+
+            count: 5
+          },
+          saved:3,
+          subtotal:12
+
+        },
+        {
+          cartItem:{
+            item:new Item('ITEM000003', '荔枝', '斤', 15.00),
+
+            count: 2
+          },
+          saved:0,
+          subtotal:30
+
+        },
+        {
+          cartItem:{
+            item:new Item('ITEM000005', '方便面', '袋', 4.50),
+
+            count: 3
+          },
+          saved:4.5,
+          subtotal:9
+
+        }
+      ];
+      expect(buildReceiptItems(countedItems)).toEqual(itemsSubtotal);
+    });
+  });
 });

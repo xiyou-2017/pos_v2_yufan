@@ -37,7 +37,31 @@ function buildItems(inputs) {
     }
   });
 
-  console.log(carItems);
   return carItems;
 
+}
+
+function buildReceiptItems(cartItems) {
+
+  let itemsSubtotal = [];
+
+  cartItems.forEach(function (cartItem) {
+
+    if (Promotion.all()[0].barcodes.find((barcode) => {return barcode == cartItem.item.barcode})) {
+      if (Promotion.all()[0].type == "BUY_TWO_GET_ONE_FREE") {
+        let money = cartItem.count * cartItem.item.price;
+        let saved = parseInt(cartItem.count / 3) * cartItem.item.price;
+        let subtotal = money - saved;
+        itemsSubtotal.push({cartItem, saved, subtotal});
+      }
+    }
+    
+    else {
+      let subtotal = cartItem.count * cartItem.item.price;
+      let saved = 0;
+      itemsSubtotal.push({cartItem, saved, subtotal});
+    }
+  });
+
+  return itemsSubtotal;
 }
