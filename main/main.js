@@ -1,11 +1,11 @@
 'use strict';
 
 let printReceipt = (inputs)=> {
-  // let cartItems = buildItems(inputs);
-  // let itemsSubtotal = buildReceiptItems(cartItems);
-  // let receipt = buildReceipt(itemsSubtotal);
-  // printCartItemsReceipt(receipt);
-}
+  let cartItems = buildItems(inputs);
+  let itemsSubtotal = buildReceiptItems(cartItems);
+  let receipt = buildReceipt(itemsSubtotal);
+  printCartItemsReceipt(receipt);
+};
 
 
 function buildItems(inputs) {
@@ -55,7 +55,6 @@ function buildReceiptItems(cartItems) {
         itemsSubtotal.push({cartItem, saved, subtotal});
       }
     }
-    
     else {
       let subtotal = cartItem.count * cartItem.item.price;
       let saved = 0;
@@ -64,4 +63,46 @@ function buildReceiptItems(cartItems) {
   });
 
   return itemsSubtotal;
+}
+
+function buildReceipt(itemsSubtotal) {
+  let savedTotal = 0;
+  let total = 0;
+
+  itemsSubtotal.forEach(function (itemsSub) {
+    savedTotal += itemsSub.saved;
+    total += itemsSub.subtotal;
+  });
+
+  return {itemsSubtotal, savedTotal, total};
+}
+
+
+function printCartItemsReceipt(receipt) {
+  let String = "***<没钱赚商店>收据***";
+
+  let dateDigitToString = (num) =>{
+    return num < 10 ? '0' + num : num;
+  };
+
+  let currentDate = new Date();
+   let year = dateDigitToString(currentDate.getFullYear());
+   let month = dateDigitToString(currentDate.getMonth() + 1);
+   let day = dateDigitToString(currentDate.getDate());
+  let  hour = dateDigitToString(currentDate.getHours());
+  let  minute = dateDigitToString(currentDate.getMinutes());
+  let  second = dateDigitToString(currentDate.getSeconds());
+
+
+
+  String +='\n打印时间：'+year+"年"+month+"月"+day+"日 "+hour+":"+minute+":"+second+'\n----------------------';
+
+
+
+  receipt.itemsSubtotal.forEach(function (itemsSubtotal) {
+    String += '\n名称：' + itemsSubtotal.cartItem.item.name + '，数量：' + itemsSubtotal.cartItem.count + itemsSubtotal.cartItem.item.unit + '，单价：' + itemsSubtotal.cartItem.item.price.toFixed(2) + '(元)，小计：' + itemsSubtotal.subtotal.toFixed(2) + '(元)';
+  });
+
+  String += '\n----------------------' + '\n总计：' + receipt.total.toFixed(2) + '(元)' + '\n节省：' + receipt.savedTotal.toFixed(2) + '(元)' + '\n**********************';
+  console.log(String);
 }
